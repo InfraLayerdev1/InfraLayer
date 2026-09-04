@@ -16,3 +16,4 @@ WHERE company_id = user's company_id
 
 Never allow:
 User A -> Company B documents
+
