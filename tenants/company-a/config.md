@@ -8,3 +8,4 @@ Company A Assistant
 
 knowledge_scope:
 company_a_documents
+
