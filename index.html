@@ -1,52 +1,232 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230D9488'/%3E%3Ctext x='50' y='67' font-size='44' text-anchor='middle' fill='white' font-family='Arial, sans-serif' font-weight='bold'%3ECA%3C/text%3E%3C/svg%3E">
+  <title>Company AI — Employee Knowledge Assistant</title>
 
-<body>
+  <!-- Preconnect for font performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<h2>Company AI Assistant</h2>
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body data-theme="light">
+  <a href="#main-chat" class="skip-link">Skip to chat</a>
 
-<p>Ask questions about company documents and policies.</p>
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar" aria-label="Conversation and navigation">
+    <header class="sidebar-brand">
+      <div class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <div class="brand-name">Company AI</div>
+        <div class="brand-sub">Employee Knowledge Assistant</div>
+      </div>
+    </header>
 
-<input id="q" placeholder="Ask something">
-<button onclick="ask()">Send</button>
+    <div class="sidebar-actions">
+      <button id="new-chat-btn" class="btn-new-chat" type="button">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        <span>New Chat</span>
+      </button>
+      <div class="search-box">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="search" id="search-input" placeholder="Search sessions..." aria-label="Search sessions">
+      </div>
+    </div>
 
-<div id="chat"></div>
+    <nav class="sessions" id="sessions-list" aria-label="Chat sessions"></nav>
 
-<script>
+    <div class="admin-entry hidden" id="admin-panel-btn">
+      <button type="button">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span>Admin Panel</span>
+      </button>
+    </div>
 
-const API =
-"http://careers-materials-posts-trigger.trycloudflare.com/api/v1/prediction/1ee561da-6b7c-4ff5-a983-2d91d86b15b5";
+    <button class="user-profile" id="user-profile-btn" type="button" title="Log out" aria-label="Log out">
+      <span class="user-avatar" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </span>
+      <span class="user-meta">
+        <span class="user-name" id="user-name-display">User</span>
+        <span class="user-role" id="user-role-display">Role</span>
+      </span>
+      <span class="logout-label">Log out</span>
+    </button>
+  </aside>
 
+  <!-- ============ MAIN CHAT ============ -->
+  <main class="main" id="main-chat">
+    <div class="messages" id="messages-container" role="log" aria-live="polite" aria-label="Conversation"></div>
+    <div class="input-area">
+      <form id="chat-form" class="input-container" autocomplete="off">
+        <label for="chat-input" class="sr-only">Type your message</label>
+        <input type="text" id="chat-input" placeholder="Type a message..." aria-describedby="chat-hint">
+        <button type="submit" class="send-btn">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+          <span>Send</span>
+        </button>
+      </form>
+      <p id="chat-hint" class="sr-only">Press Enter to send your message.</p>
+    </div>
+  </main>
 
-async function ask(){
+  <!-- ============ AUTH MODAL ============ -->
+  <div class="modal-overlay" id="auth-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal">
+      <div class="modal-brand">
+        <div class="brand-mark brand-mark-lg" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        </div>
+      </div>
+      <h1 id="modal-title">Log In</h1>
+      <p class="modal-subtitle">Access your knowledge workspace</p>
 
-let q = document.getElementById("q").value;
+      <form id="auth-form">
+        <div class="form-group hidden" id="name-group">
+          <label for="auth-name">Full Name</label>
+          <input type="text" id="auth-name" placeholder="John Doe" autocomplete="name">
+        </div>
+        <div class="form-group">
+          <label for="auth-email">Email Address</label>
+          <input type="email" id="auth-email" required placeholder="user@company.com" autocomplete="email">
+        </div>
+        <div class="form-group">
+          <label for="auth-password">Password</label>
+          <input type="password" id="auth-password" required placeholder="••••••••" autocomplete="current-password">
+        </div>
+        <button type="submit" class="modal-btn" id="auth-submit-btn">Log In</button>
+      </form>
 
-document.getElementById("chat").innerHTML +=
-"<p><b>You:</b> " + q + "</p>";
+      <div class="switch-mode">
+        <span id="switch-text">Don't have an account?</span>
+        <button type="button" id="switch-btn" class="link-btn">Sign Up</button>
+      </div>
+    </div>
+  </div>
 
+  <!-- ============ ADMIN MODAL ============ -->
+  <div class="modal-overlay hidden" id="admin-modal" role="dialog" aria-modal="true" aria-labelledby="admin-title">
+    <div class="modal admin-modal">
+      <header class="admin-modal-header">
+        <div class="admin-title-group">
+          <h2 id="admin-title">Admin Panel</h2>
+          <span class="header-sub">System controls</span>
+        </div>
+        <button type="button" class="modal-close-btn" id="admin-modal-close-btn" aria-label="Close admin panel">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </header>
 
-let res = await fetch(API,{
-method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body:JSON.stringify({
-question:q
-})
-});
+      <div class="admin-tabs" role="tablist" aria-label="Admin sections">
+        <button type="button" class="admin-tab-btn active" role="tab" aria-selected="true" data-admin-tab="users">User Management</button>
+        <button type="button" class="admin-tab-btn" role="tab" aria-selected="false" data-admin-tab="audit">Audit Trail</button>
+        <button type="button" class="admin-tab-btn" role="tab" aria-selected="false" data-admin-tab="vault">Knowledge Vault</button>
+      </div>
 
+      <!-- Tab 1: Users -->
+      <section class="admin-tab-panel" id="admin-tab-users" role="tabpanel" aria-label="User Management">
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr><th>Email</th><th>Role</th><th>Status</th><th>Created</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="admin-users-body"></tbody>
+          </table>
+        </div>
+      </section>
 
-let data = await res.json();
+      <!-- Tab 2: Audit -->
+      <section class="admin-tab-panel hidden" id="admin-tab-audit" role="tabpanel" aria-label="Audit Trail">
+        <div class="admin-toolbar">
+          <div class="search-box">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
+            <input type="search" id="admin-audit-search" placeholder="Filter by action, user, or IP..." aria-label="Filter audit logs">
+          </div>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr><th>Timestamp</th><th>Action</th><th>User</th><th>IP Address</th><th>Details</th></tr>
+            </thead>
+            <tbody id="admin-audit-body"></tbody>
+          </table>
+        </div>
+      </section>
 
+      <!-- Tab 3: Vault -->
+      <section class="admin-tab-panel hidden" id="admin-tab-vault" role="tabpanel" aria-label="Knowledge Vault">
+        <form class="admin-form" id="vault-ingest-form">
+          <div class="admin-form-row">
+            <div class="file-field">
+              <label>Document file</label>
+              <label class="file-picker btn btn-primary" for="vault-file">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+                <span>Choose file</span>
+              </label>
+              <input type="file" id="vault-file" accept=".txt,.pdf,.docx,.json">
+              <span class="vault-file-name" id="vault-file-name">No file selected</span>
+            </div>
+          </div>
+          <div class="admin-form-row">
+            <div>
+              <label for="vault-dept">Department</label>
+              <select id="vault-dept">
+                <option value="ALL">ALL — Company-wide</option>
+                <option value="HR">HR</option>
+                <option value="Engineering">Engineering</option>
+                <option value="Sales">Sales</option>
+                <option value="Finance">Finance</option>
+                <option value="Executive">Executive</option>
+              </select>
+            </div>
+            <div>
+              <label for="vault-level">Minimum Access Level</label>
+              <select id="vault-level">
+                <option value="1">Level 1 — General Employee</option>
+                <option value="2">Level 2 — Manager</option>
+                <option value="3">Level 3 — Executive / C-Suite</option>
+              </select>
+            </div>
+            <div>
+              <label for="vault-company">Target Company ID</label>
+              <input type="text" id="vault-company" placeholder="company uuid" autocomplete="off">
+            </div>
+            <div>
+              <button type="submit" class="btn btn-primary" id="vault-ingest-btn">Ingest Document</button>
+            </div>
+          </div>
+        </form>
 
-document.getElementById("chat").innerHTML +=
-"<p><b>AI:</b> " + data.text + "</p>";
+        <div class="admin-toolbar">
+          <h3 class="vault-title">Active Knowledge Roster</h3>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr><th>Filename</th><th>Department</th><th>Access Level</th><th>Upload Date</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="admin-vault-body"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </div>
 
-}
+  <!-- ============ TOASTS ============ -->
+  <div class="toast-container" id="toast-container" aria-live="polite" aria-atomic="true"></div>
 
-</script>
-
+  <script src="js/ui.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/chat.js"></script>
+  <script src="js/admin.js"></script>
+  <script src="js/app.js"></script>
 </body>
-
 </html>
