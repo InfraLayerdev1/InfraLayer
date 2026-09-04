@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup Complete — Company AI</title>
+    <meta name="description" content="Your Company AI tenant has been provisioned. Here are your credentials.">
+    <style>
+        :root {
+            --color-bg: #f8fafc;
+            --color-surface: #ffffff;
+            --color-border: #e2e8f0;
+            --color-text: #1e293b;
+            --color-text-muted: #64748b;
+            --color-primary: #4f46e5;
+            --color-primary-hover: #4338ca;
+            --color-primary-light: #eef2ff;
+            --color-success: #059669;
+            --color-success-light: #d1fae5;
+            --color-warning: #d97706;
+            --color-warning-light: #fef3c7;
+            --color-danger: #dc2626;
+            --color-danger-light: #fee2e2;
+            --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 16px;
+            --transition: 150ms ease;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --color-bg: #0f172a;
+                --color-surface: #1e293b;
+                --color-border: #334155;
+                --color-text: #f1f5f9;
+                --color-text-muted: #94a3b8;
+                --color-primary: #818cf8;
+                --color-primary-hover: #a5b4fc;
+                --color-primary-light: #1e1b4b;
+                --color-success: #34d399;
+                --color-success-light: #064e3b;
+                --color-warning: #fbbf24;
+                --color-warning-light: #422006;
+                --color-danger: #f87171;
+                --color-danger-light: #450a0a;
+            }
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { font-size: 16px; }
+        body {
+            font-family: var(--font-sans);
+            background: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 720px;
+        }
+
+        .card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+        }
+
+        .card-header {
+            background: var(--color-primary);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .card-header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-header p {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        .success-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--color-success-light);
+            color: var(--color-success);
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--color-success);
+        }
+
+        .success-badge svg { flex-shrink: 0; }
+
+        .section {
+            margin-bottom: 2rem;
+        }
+
+        .section:last-child { margin-bottom: 0; }
+
+        .section-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--color-text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .credential-card {
+            background: var(--color-bg);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .credential-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--color-text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .credential-value {
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+            word-break: break-all;
+            color: var(--color-text);
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            padding: 0.75rem;
+            position: relative;
+        }
+
+        .credential-value.copied {
+            border-color: var(--color-success);
+            background: var(--color-success-light);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-family: inherit;
+            font-size: 0.875rem;
+            font-weight: 600;
+            padding: 0.625rem 1.25rem;
+            border-radius: var(--radius-sm);
+            border: none;
+            cursor: pointer;
+            transition: all var(--transition);
+            text-decoration: none;
+        }
+
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+        .btn-primary:hover:not(:disabled) { background: var(--color-primary-hover); }
+
+        .btn-secondary {
+            background: var(--color-surface);
+            color: var(--color-text);
+            border: 1px solid var(--color-border);
+        }
+        .btn-secondary:hover:not(:disabled) { background: var(--color-bg); border-color: var(--color-text-muted); }
+
+        .btn-sm { padding: 0.375rem 0.75rem; font-size: 0.8125rem; }
+
+        .btn-group { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.75rem; }
+
+        .copy-btn { position: absolute; top: 0.5rem; right: 0.5rem; }
+
+        .code-block {
+            background: var(--color-bg);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            font-family: var(--font-mono);
+            font-size: 0.8125rem;
+            line-height: 1.7;
+        }
+
+        .code-block-header {
+            background: var(--color-surface);
+            border-bottom: 1px solid var(--color-border);
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--color-text-muted);
+        }
+
+        .code-block pre {
+            margin: 0;
+            padding: 1rem;
+            overflow-x: auto;
+            color: var(--color-text);
+        }
+
+        .code-block code { font-family: inherit; }
+
+        .warning-box {
+            background: var(--color-warning-light);
+            border: 1px solid var(--color-warning);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .warning-box svg { flex-shrink: 0; margin-top: 0.125rem; color: var(--color-warning); }
+
+        .warning-box .content { flex: 1; }
+
+        .warning-box .title { font-weight: 600; margin-bottom: 0.25rem; color: var(--color-warning); }
+
+        .steps { display: flex; flex-direction: column; gap: 1rem; }
+
+        .step {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--color-bg);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+        }
+
+        .step-number {
+            flex-shrink: 0;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            background: var(--color-primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.875rem;
+        }
+
+        .step-content h4 { font-weight: 600; margin-bottom: 0.25rem; }
+        .step-content p { font-size: 0.875rem; color: var(--color-text-muted); }
+
+        .footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: var(--color-text-muted);
+            font-size: 0.875rem;
+            border-top: 1px solid var(--color-border);
+        }
+
+        .footer a { color: var(--color-primary); text-decoration: none; }
+        .footer a:hover { text-decoration: underline; }
+
+        .hidden { display: none !important; }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        .toast.show { transform: translateY(0); opacity: 1; }
+        .toast.success { border-color: var(--color-success); }
+        .toast svg { flex-shrink: 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <header class="card-header">
+                <h1>🎉 Setup Complete</h1>
+                <p>Your Company AI tenant has been provisioned successfully</p>
+            </header>
+
+            <div class="card-body">
+                <div class="success-badge">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                    <span>Tenant provisioned and ready to use</span>
+                </div>
+
+                <div class="warning-box" id="warningBox">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                    <div class="content">
+                        <div class="title">Important: Save your credentials now</div>
+                        <div>This is the <strong>only time</strong> your API key and temporary password will be displayed. Store them securely — they cannot be recovered.</div>
+                    </div>
+                </div>
+
+                <!-- Credentials Section -->
+                <section class="section">
+                    <div class="section-title">Organization Credentials</div>
+
+                    <div class="credential-card">
+                        <div class="credential-label">Tenant Organization ID</div>
+                        <div class="credential-value" id="tenantIdValue" data-copy-target="tenantId">Loading…</div>
+                        <button class="btn btn-secondary btn-sm copy-btn" data-copy-target="tenantId" aria-label="Copy Tenant ID">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                            Copy
+                        </button>
+                    </div>
+
+                    <div class="credential-card">
+                        <div class="credential-label">API Key (Company Secret Key)</div>
+                        <div class="credential-value" id="apiKeyValue" data-copy-target="apiKey">Loading…</div>
+                        <button class="btn btn-secondary btn-sm copy-btn" data-copy-target="apiKey" aria-label="Copy API Key">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                            Copy
+                        </button>
+                    </div>
+
+                    <div class="credential-card">
+                        <div class="credential-label">Admin Email</div>
+                        <div class="credential-value" id="adminEmailValue">Loading…</div>
+                    </div>
+
+                    <div class="credential-card">
+                        <div class="credential-label">Temporary Password</div>
+                        <div class="credential-value" id="tempPasswordValue" data-copy-target="tempPassword">Loading…</div>
+                        <button class="btn btn-secondary btn-sm copy-btn" data-copy-target="tempPassword" aria-label="Copy Temporary Password">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                            Copy
+                        </button>
+                    </div>
+                </section>
+
+                <!-- cURL Examples Section -->
+                <section class="section">
+                    <div class="section-title">Quick Start — cURL Examples</div>
+                    <p style="font-size: 0.875rem; color: var(--color-text-muted); margin-bottom: 1rem;">
+                        Replace <code><API_KEY></code> and <code><TENANT_ID></code> with your credentials above.
+                    </p>
+
+                    <div class="code-block">
+                        <div class="code-block-header">
+                            <span>Authenticate & Get JWT Token</span>
+                            <button class="btn btn-secondary btn-sm" onclick="copyCodeBlock(this)">Copy</button>
+                        </div>
+                        <pre><code>curl -X POST https://api.yourcompany.com/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email": "admin@yourcompany.com", "password": "YOUR_TEMP_PASSWORD"}'
+
+# Response includes: {"success": true, "token": "eyJ...", "user": {...}}
+# Use the token as: Authorization: Bearer <token></code></pre>
+                    </div>
+
+                    <div class="code-block" style="margin-top: 1rem;">
+                        <div class="code-block-header">
+                            <span>Query the Knowledge Base (Pre-LLM RAG)</span>
+                            <button class="btn btn-secondary btn-sm" onclick="copyCodeBlock(this)">Copy</button>
+                        </div>
+                        <pre><code>curl -X POST https://api.yourcompany.com/ask \
+  -H "Authorization: Bearer <YOUR_JWT_TOKEN>" \
+  -H "Content-Type: application/json" \
+  -d '{"user_id": "<YOUR_USER_ID>", "session_id": "<SESSION_ID>", "question": "What is our PTO policy?"}'</code></pre>
+                    </div>
+
+                    <div class="code-block" style="margin-top: 1rem;">
+                        <div class="code-block-header">
+                            <span>Direct API Key Auth (Service-to-Service)</span>
+                            <button class="btn btn-secondary btn-sm" onclick="copyCodeBlock(this)">Copy</button>
+                        </div>
+                        <pre><code>curl -X POST https://api.yourcompany.com/ask \
+  -H "Authorization: Bearer <YOUR_API_KEY>" \
+  -H "Content-Type: application/json" \
+  -d '{"user_id": "<YOUR_USER_ID>", "session_id": "<SESSION_ID>", "question": "Summarize Q3 strategy"}'</code></pre>
+                    </div>
+                </section>
+
+                <!-- Next Steps -->
+                <section class="section">
+                    <div class="section-title">Next Steps</div>
+                    <div class="steps">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h4>Log in to the Admin Dashboard</h4>
+                                <p>Use your admin email and temporary password at <code>https://app.yourcompany.com</code> — change your password immediately.</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h4>Upload Company Documents</h4>
+                                <p>Navigate to the <strong>Knowledge Vault</strong> tab in the admin panel to ingest PDFs, text files, or JSON documents with department and access-level metadata.</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h4>Invite Team Members</h4>
+                                <p>Use the <strong>User Management</strong> tab to add employees. Their access level and department determine what knowledge they can retrieve.</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <h4>Test the Pre-LLM Security Filter</h4>
+                                <p>Visit the <a href="/playground.html" style="color: var(--color-primary);">Interactive Security Playground</a> to see real-time context stripping by role (Employee vs Executive).</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <div style="text-align: center; margin-top: 2rem;">
+                    <a href="/playground.html" class="btn btn-primary">Open Security Playground →</a>
+                </div>
+            </div>
+
+            <footer class="footer">
+                <p>Company AI — Multi-Tenant Pre-LLM Security Control Plane</p>
+                <p style="margin-top: 0.5rem;">Questions? <a href="mailto:support@yourcompany.com">Contact Support</a></p>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast" id="toast" role="alert" aria-live="polite">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="toast-icon">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+        </svg>
+        <span class="toast-message">Copied to clipboard</span>
+    </div>
+
+    <script>
+        (function() {
+            // Parse URL parameters (Stripe redirects with session_id)
+            const params = new URLSearchParams(window.location.search);
+            const sessionId = params.get('session_id');
+
+            // Credential elements
+            const elements = {
+                tenantId: document.getElementById('tenantIdValue'),
+                apiKey: document.getElementById('apiKeyValue'),
+                adminEmail: document.getElementById('adminEmailValue'),
+                tempPassword: document.getElementById('tempPasswordValue')
+            };
+
+            const copyButtons = document.querySelectorAll('.copy-btn');
+            const toast = document.getElementById('toast');
+            const toastMessage = toast.querySelector('.toast-message');
+            const toastIcon = toast.querySelector('.toast-icon');
+
+            // Simulated credentials (in production, these would come from a secure session or be passed via a one-time token)
+            // For demo purposes, we'll show placeholder values and explain how to get real ones
+            function loadCredentials() {
+                // In a real implementation, you'd fetch these from a secure endpoint
+                // using the session_id to retrieve the one-time provisioning data
+                // For now, we show the structure with placeholders
+
+                if (sessionId) {
+                    // Attempt to fetch from a secure credentials endpoint
+                    fetch(`/api/billing/credentials?session_id=${encodeURIComponent(sessionId)}`)
+                        .then(r => r.json())
+                        .then(data => {
+                            if (data.success) {
+                                populateCredentials(data.credentials);
+                            } else {
+                                showPlaceholderCredentials();
+                            }
+                        })
+                        .catch(() => showPlaceholderCredentials());
+                } else {
+                    showPlaceholderCredentials();
+                }
+            }
+
+            function populateCredentials(creds) {
+                elements.tenantId.textContent = creds.tenant_id;
+                elements.apiKey.textContent = creds.api_key;
+                elements.adminEmail.textContent = creds.admin_email;
+                elements.tempPassword.textContent = creds.temp_password;
+                elements.tenantId.dataset.value = creds.tenant_id;
+                elements.apiKey.dataset.value = creds.api_key;
+                elements.tempPassword.dataset.value = creds.temp_password;
+            }
+
+            function showPlaceholderCredentials() {
+                const placeholders = {
+                    tenantId: 'tenant_' + Math.random().toString(36).substr(2, 12),
+                    apiKey: 'csk_live_' + Math.random().toString(36).substr(2, 32),
+                    adminEmail: 'admin@yourcompany.com',
+                    tempPassword: 'TempPass123!@#'
+                };
+
+                elements.tenantId.textContent = placeholders.tenantId;
+                elements.apiKey.textContent = placeholders.apiKey;
+                elements.adminEmail.textContent = placeholders.adminEmail;
+                elements.tempPassword.textContent = placeholders.tempPassword;
+
+                elements.tenantId.dataset.value = placeholders.tenantId;
+                elements.apiKey.dataset.value = placeholders.apiKey;
+                elements.tempPassword.dataset.value = placeholders.tempPassword;
+
+                // Add note
+                const note = document.createElement('p');
+                note.style.cssText = 'font-size: 0.8125rem; color: var(--color-warning); margin-top: 1rem; padding: 0.75rem; background: var(--color-warning-light); border: 1px solid var(--color-warning); border-radius: var(--radius-sm);';
+                note.innerHTML = '<strong>Demo Mode:</strong> No Stripe session detected. These are placeholder credentials. Complete a real checkout to get live credentials.';
+                elements.tempPassword.parentElement.appendChild(note);
+            }
+
+            // Copy to clipboard functionality
+            function copyToClipboard(text, label) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast(`Copied ${label}!`, true);
+                    // Visual feedback on the value element
+                    const target = document.querySelector(`[data-copy-target="${label}"]`);
+                    if (target) {
+                        target.classList.add('copied');
+                        setTimeout(() => target.classList.remove('copied'), 1500);
+                    }
+                }).catch(() => {
+                    showToast('Failed to copy', false);
+                });
+            }
+
+            function showToast(message, success) {
+                toastMessage.textContent = message;
+                toast.classList.toggle('success', success);
+                toastIcon.innerHTML = success
+                    ? '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline>'
+                    : '<circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line>';
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 3000);
+            }
+
+            function copyCodeBlock(btn) {
+                const pre = btn.closest('.code-block').querySelector('pre');
+                const text = pre.textContent;
+                navigator.clipboard.writeText(text).then(() => {
+                    const original = btn.textContent;
+                    btn.textContent = 'Copied!';
+                    btn.style.background = 'var(--color-success-light)';
+                    btn.style.borderColor = 'var(--color-success)';
+                    btn.style.color = 'var(--color-success)';
+                    setTimeout(() => {
+                        btn.textContent = original;
+                        btn.style.background = '';
+                        btn.style.borderColor = '';
+                        btn.style.color = '';
+                    }, 2000);
+                });
+            }
+
+            // Event listeners for copy buttons
+            copyButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const target = btn.dataset.copyTarget;
+                    const valueEl = document.querySelector(`[data-copy-target="${target}"]`);
+                    if (valueEl && valueEl.dataset.value) {
+                        copyToClipboard(valueEl.dataset.value, target);
+                    }
+                });
+            });
+
+            // Initialize
+            loadCredentials();
+        })();
+    </script>
+</body>
+</html>
