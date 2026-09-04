@@ -28,9 +28,9 @@
 
 | Package | Language | Install | Description |
 |---------|----------|---------|-------------|
-| **[@infralayer/core](packages/infralayer-core)** | TypeScript | `npm i @infralayer/core` | **Zero-dependency** core security filter (sanitize, detect, evaluate) |
-| **[@infralayer/sdk](packages/infralayer-sdk)** | TypeScript | `npm i @infralayer/sdk` | Full client with retry, auth, local + remote modes |
-| **[infralayer](packages/infralayer-python)** | Python | `pip install infralayer` | Native Python SDK (async/sync, Poetry, Pydantic v2) |
+| **[@infralayer/core](packages/core)** | TypeScript | `npm i @infralayer/core` | **Zero-dependency** core security filter (sanitize, detect, evaluate) |
+| **[@infralayer/sdk](packages/sdk)** | TypeScript | `npm i @infralayer/sdk` | Full client with retry, auth, local + remote modes |
+| **[infralayer](sdks/python)** | Python | `pip install infralayer` | Native Python SDK (async/sync, Poetry, Pydantic v2) |
 
 ---
 
@@ -302,16 +302,17 @@ pytest --cov=src/infralayer --cov-report=term-missing
 ```
 company-ai/
 ├── packages/
-│   ├── infralayer-core/        # Zero-dependency TS core
+│   ├── core/                   # Zero-dependency TS core (@infralayer/core)
 │   │   ├── src/index.ts        # InfraLayerCore class, types, patterns
-│   │   ├── src/index.test.ts   # 25+ tests
+│   │   ├── src/index.test.ts   # 27+ tests
 │   │   ├── package.json        # MIT, zero deps, Node >=20
 │   │   └── tsconfig.json
-│   ├── infralayer-sdk/         # Full TS/Node SDK
+│   ├── sdk/                    # Full TS/Node SDK (@infralayer/sdk)
 │   │   ├── src/index.ts        # InfraLayer client, axios + retry
-│   │   ├── src/index.test.ts   # 35+ tests (local/remote, mode switching)
+│   │   ├── src/index.test.ts   # 29+ tests (local/remote, mode switching)
 │   │   └── package.json        # Peer dep on @infralayer/core
-│   └── infralayer-python/      # Native Python SDK
+├── sdks/
+│   └── python/                 # Native Python SDK (infralayer)
 │       ├── src/infralayer/     # Package source
 │       │   ├── __init__.py     # Exports: create_local_infralayer, types, exceptions
 │       │   ├── core.py         # InfraLayerCore (mirrors TS)
@@ -328,13 +329,23 @@ company-ai/
 ├── gateway/                    # Production gateway (Express + Supabase)
 ├── scripts/
 │   └── benchmark.js            # 1000-request performance test
+├── examples/
+│   ├── nextjs-rag/             # Next.js 14 + @infralayer/sdk
+│   └── fastapi-rag/            # FastAPI + infralayer Python
+├── docs/
+│   ├── architecture/           # System design docs
+│   ├── api/                    # API specifications
+│   ├── deployment/             # Deployment guides
+│   └── guides/                 # User guides & SOPs
 ├── LICENSE                     # MIT
-├── CONTRIBUTING.md
+├── CONTRIBUTING.md             # Moved to docs/guides/
 ├── .github/
 │   └── ISSUE_TEMPLATE/
 │       ├── bug_report.md
 │       ├── feature_request.md
 │       └── security_vulnerability.md
+├── package.json                # Monorepo workspace config
+├── turbo.json                  # Turborepo build orchestration
 └── README.md                   # This file
 ```
 
@@ -355,7 +366,7 @@ Please use the [Security Vulnerability Issue Template](.github/ISSUE_TEMPLATE/se
 
 ## 🤝 Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for:
+See [CONTRIBUTING.md](docs/guides/CONTRIBUTING.md) for:
 - Development setup
 - Code style (TypeScript: ESLint + Prettier; Python: Black + Ruff + MyPy)
 - Testing requirements (80% minimum coverage)

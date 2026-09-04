@@ -24,7 +24,7 @@ There is no test suite (`npm test` is a placeholder that exits 1) and no linter.
 
 The system has three layers plus an answer generator, with a hard rule about which layer may decide permissions:
 
-- **Frontend** — static HTML/CSS/JS chat UIs (`index.html`, `website/`, `demo-package/`, `final-demo/`). The user asks a question. `index.html` also hosts the admin panel: an auth-role-gated "Admin Panel" sidebar button (reads `role` from the `auth_user` localStorage object), a modal with User Management (`GET/PATCH /admin/users`) and Audit Trail (`GET /admin/audit-logs`) tabs, live filters, and status badges. The shared `request()` helper treats any 401/403 as session-revoked (announces + logs out). **2026-08-08 frontend revamp:** `index.html` was restyled with a modern design system (system font stack, indigo `#4f46e5` primary, white sidebar with brand header, card-based chat/admin modals, focus rings, custom scrollbars, favicon). The inline `<script>` and every element ID/class it depends on were left untouched, so behavior is identical to before — keep it that way when restyling further. `index.html.save` (repo root) is the stale pre-revamp backup; do not edit it.
+- **Frontend** — static HTML/CSS/JS chat UIs (`index.html`, `apps/web-client/`, `core/sandbox-demo/`). The user asks a question. `index.html` also hosts the admin panel: an auth-role-gated "Admin Panel" sidebar button (reads `role` from the `auth_user` localStorage object), a modal with User Management (`GET/PATCH /admin/users`) and Audit Trail (`GET /admin/audit-logs`) tabs, live filters, and status badges. The shared `request()` helper treats any 401/403 as session-revoked (announces + logs out). **2026-08-08 frontend revamp:** `index.html` was restyled with a modern design system (system font stack, indigo `#4f46e5` primary, white sidebar with brand header, card-based chat/admin modals, focus rings, custom scrollbars, favicon). The inline `<script>` and every element ID/class it depends on were left untouched, so behavior is identical to before — keep it that way when restyling further. `index.html.save` (repo root) is the stale pre-revamp backup; do not edit it.
 - **Gateway** (`gateway/server.js`, Express) — the security and control layer. Authenticates the user, verifies the account live against Supabase, and coordinates the request.
 - **Supabase** (Postgres + pgvector) — the data and permission authority. Stores users, companies, memberships, permissions, documents. It decides who may access what; it never generates answers.
 - **Flowise** (vendored upstream at `/Users/user/Flowise`) — the answer generator. Receives `{ question, allowed context, instructions }` and returns the reply.
@@ -71,9 +71,9 @@ Every security-relevant event writes a row to the Supabase `audit_logs` table. C
 ## Tenant & client scaffolding
 
 - `tenants/<company>/config.md` — per-tenant config (company_id, assistant_name, knowledge_scope).
-- `client-template/` — onboarding template for a new client (`CLIENT_INFO`, `DOCUMENT_CHECKLIST`, `SERVICE_PACKAGE`). Note it contains a nested `client-template/client-template/` duplicate.
-- `clients/demo-company/` — a demo client with deployment checklist and QA-test docs.
-- `demo-package/`, `final-demo/website/`, `website/`, `index.html` — demo/standalone chat frontends.
+- `templates/node-starter/` — onboarding template for a new client (`CLIENT_INFO`, `DOCUMENT_CHECKLIST`, `SERVICE_PACKAGE`).
+- `examples/enterprise-sandbox/` — a demo client with deployment checklist and QA-test docs.
+- `core/sandbox-demo/`, `apps/web-client/`, `website/`, `index.html` — demo/standalone chat frontends.
 
 ## Phase 8: Knowledge Vault & Pre-LLM Security Filtering (Tenant-Scoped RAG)
 
@@ -271,8 +271,8 @@ Final verification battery executed against the **live Vercel production deploym
 - **Test 3 — Invalid Auth**: `POST /auth/login` (bad creds) → 401 `{ error: "Invalid email or password." }` + `USER_LOGIN_FAILED` audit row ✅ (live)
 - **Test 4 — Rate Limit (FIXED for serverless)**: sequential hits → 5×401 then 429 `{"error":"Too many authentication attempts..."}` + `RATE_LIMIT_EXCEEDED` audit row ✅ (live). **Root cause:** `express-rate-limit` uses an in-memory counter — stateless serverless functions each get their own blank slate, so the limit never tripped. **Fix (2026-08-17):** replaced the limiter with `@upstash/ratelimit` + `@upstash/redis` (fixed-window, prefix `rl:auth` / `rl:api`), giving a shared distributed counter across all function invocations. The old `express-rate-limit` import was removed; an in-memory fallback remains only for local dev without Upstash creds (not serverless-safe). Set `UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN` in the Vercel dashboard for production.
 - **Test 5 — Observability**: audit pipeline confirmed live — the Test 4 breaches wrote `RATE_LIMIT_EXCEEDED` rows to Supabase `audit_logs` (verified 5 rows, correct `ip`/`endpoint` detail). Crash telemetry wired (`process.on("uncaughtException"|"unhandledRejection")` → `SYSTEM_CRASH_PREVENTED` audit, hard 1.5s exit cap at `server.js:1197`). Global error handler audits `SERVER_ERROR` (`server.js:1143`).
-- **Test 6 — Backup & Recovery**: provided by Supabase managed backups (daily snapshots + PITR) — no app-level backup code required for a SaaS gateway. Client docs present: `SOP.md`, `tenants/<company>/config.md`, `clients/demo-company/{deployment/DEPLOYMENT_CHECKLIST.md, tests/QA_TESTS.md}`.
-- **Test 7 — Client Documentation**: `SOP.md` (onboarding + maintenance SOP), `client-template/SERVICE_PACKAGE.md`, per-tenant `config.md`, demo-company deployment/QA checklists all in place.
+- **Test 6 — Backup & Recovery**: provided by Supabase managed backups (daily snapshots + PITR) — no app-level backup code required for a SaaS gateway. Client docs present: `SOP.md`, `tenants/<company>/config.md`, `examples/enterprise-sandbox/{deployment/DEPLOYMENT_CHECKLIST.md, tests/QA_TESTS.md}`.
+- **Test 7 — Client Documentation**: `SOP.md` (onboarding + maintenance SOP), `templates/node-starter/SERVICE_PACKAGE.md`, per-tenant `config.md`, enterprise-sandbox deployment/QA checklists all in place.
 
 ### Live deployment state (2026-08-17)
 - **Vercel project**: `acme-4c15/gateway` (project id `prj_TN0TIgCRA9YdC30jpMHHGtCcSFKZ`).
