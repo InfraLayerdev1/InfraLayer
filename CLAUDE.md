@@ -380,3 +380,4 @@ Security:        273 injections, 453 PII, 90 secrets detected over 1,000 reqs
 - The repo is a single squashed commit ("Phase 4 - Block 3 complete"); there is no meaningful git history to recover from.
 - `repomix-output.xml` (repo root) is the canonical **context bundle** — a Repomix pack of the whole repo (40 files, sorted by change count) for feeding AI/IDE tools. It contains `gateway/.env` verbatim, so treat it as sensitive too. Regenerate it after meaningful code changes; a whitespace-normalized diff against the live tree is the way to check it is current (repomix strips trailing newlines, so raw `diff` shows false positives).
 - `gateway/company-ai-demo` and `gateway/nano` are 0-byte stray files in the gateway dir (harmless; ignore them).
+

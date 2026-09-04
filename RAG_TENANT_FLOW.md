@@ -25,3 +25,4 @@ AI answer
 Security rule:
 
 AI never receives another company's data.
+

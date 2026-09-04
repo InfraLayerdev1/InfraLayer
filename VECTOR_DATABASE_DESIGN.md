@@ -25,3 +25,4 @@ company_a
 The retriever filters:
 
 company_id = current user company
+
