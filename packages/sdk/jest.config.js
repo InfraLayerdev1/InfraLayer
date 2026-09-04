@@ -14,7 +14,7 @@ module.exports = {
   coverageReporters: ['text', 'lcov', 'html'],
   verbose: true,
   moduleNameMapper: {
-    '^@infralayer/core$': '<rootDir>/../infralayer-core/src/index.ts'
+    '^@infralayer/core$': '<rootDir>/../core/src/index.ts'
   },
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js']
 };
