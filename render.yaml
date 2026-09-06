@@ -1,0 +1,35 @@
+# Render.com Blueprint for company-ai Gateway
+# Deploy: push to GitHub → connect repo in Render → "New Blueprint Instance"
+
+services:
+  # Backend Web Service (Gateway)
+  - type: web
+    name: company-ai-gateway
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    env: docker
+    plan: starter
+    healthCheckPath: /health/liveness
+    autoDeploy: true
+    # Environment variables (set in Render dashboard or via render.yaml envVars)
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "3000"
+      # REQUIRED - Configure these in Render dashboard (secret):
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      # OPTIONAL - Configure in Render dashboard if needed:
+      - key: FLOWISE_URL
+        sync: false
+      - key: ALLOWED_ORIGINS
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENAI_EMBEDDING_MODEL
+        value: "text-embedding-3-small"

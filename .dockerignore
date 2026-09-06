@@ -1,0 +1,55 @@
+# Git
+.git
+.gitignore
+
+# Dependencies (installed in builder stage only)
+gateway/node_modules
+**/node_modules
+
+# Environment files (never in image — injected at runtime)
+.env
+gateway/.env
+*.env
+*.env.*
+
+# IDE / Editor
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Testing / Coverage
+coverage
+.nyc_output
+
+# Build artifacts / Cache
+dist
+build
+*.tsbuildinfo
+.cache
+.parcel-cache
+.eslintcache
+
+# Documentation / Spec (not needed at runtime)
+*.md
+!index.html
+!README.md
+!package.json
+!gateway/package.json
+
+# Misc
+repomix-output.xml
+*.save
+*.bak
+tmp
+temp

@@ -1,0 +1,248 @@
+{
+  "communities": {
+    "0": [
+      "axios",
+      "bcrypt",
+      "cors",
+      "dotenv",
+      "express",
+      "express_rate_limit",
+      "helmet",
+      "jsonwebtoken",
+      "package_dependencies",
+      "package_dependencies_axios",
+      "package_dependencies_bcrypt",
+      "package_dependencies_cors",
+      "package_dependencies_dotenv",
+      "package_dependencies_express",
+      "package_dependencies_express_rate_limit",
+      "package_dependencies_helmet",
+      "package_dependencies_jsonwebtoken",
+      "package_dependencies_stripe",
+      "package_dependencies_supabase_supabase_js",
+      "package_dependencies_upstash_ratelimit",
+      "package_dependencies_upstash_redis",
+      "stripe",
+      "supabase_supabase_js",
+      "upstash_ratelimit",
+      "upstash_redis"
+    ],
+    "1": [
+      "server",
+      "server_allowedorigins",
+      "server_app",
+      "server_assertenvironment",
+      "server_axios",
+      "server_bcrypt",
+      "server_cors",
+      "server_createclient",
+      "server_createsessionhandler",
+      "server_crypto",
+      "server_exitaftertelemetry",
+      "server_express",
+      "server_generateembedding",
+      "server_getmessageshandler",
+      "server_helmet",
+      "server_jwt",
+      "server_listsessionshandler",
+      "server_ratelimit",
+      "server_rationale_1049",
+      "server_redis",
+      "server_retrieveclearedcontext",
+      "server_supabase",
+      "server_tokenblacklist"
+    ],
+    "2": [
+      "scripts_seed_demo_tenant",
+      "scripts_seed_demo_tenant_bcrypt",
+      "scripts_seed_demo_tenant_bold",
+      "scripts_seed_demo_tenant_createclient",
+      "scripts_seed_demo_tenant_crypto",
+      "scripts_seed_demo_tenant_demo_bundles",
+      "scripts_seed_demo_tenant_demo_company",
+      "scripts_seed_demo_tenant_demo_users",
+      "scripts_seed_demo_tenant_dim",
+      "scripts_seed_demo_tenant_fail",
+      "scripts_seed_demo_tenant_generatetemppassword",
+      "scripts_seed_demo_tenant_green",
+      "scripts_seed_demo_tenant_keyrole",
+      "scripts_seed_demo_tenant_main",
+      "scripts_seed_demo_tenant_onehotembedding",
+      "scripts_seed_demo_tenant_parseargs",
+      "scripts_seed_demo_tenant_prompt",
+      "scripts_seed_demo_tenant_readline",
+      "scripts_seed_demo_tenant_red",
+      "scripts_seed_demo_tenant_supabase",
+      "scripts_seed_demo_tenant_writeaudit"
+    ],
+    "3": [
+      "scripts_create_tenant",
+      "scripts_create_tenant_bcrypt",
+      "scripts_create_tenant_bold",
+      "scripts_create_tenant_createclient",
+      "scripts_create_tenant_crypto",
+      "scripts_create_tenant_dim",
+      "scripts_create_tenant_fail",
+      "scripts_create_tenant_generatetemppassword",
+      "scripts_create_tenant_green",
+      "scripts_create_tenant_keyrole",
+      "scripts_create_tenant_main",
+      "scripts_create_tenant_parseargs",
+      "scripts_create_tenant_prompt",
+      "scripts_create_tenant_readline",
+      "scripts_create_tenant_red",
+      "scripts_create_tenant_supabase",
+      "scripts_create_tenant_titlecase",
+      "scripts_create_tenant_writeaudit"
+    ],
+    "4": [
+      "package",
+      "package_author",
+      "package_description",
+      "package_keywords",
+      "package_license",
+      "package_main",
+      "package_name",
+      "package_scripts",
+      "package_scripts_create_tenant",
+      "package_scripts_seed_demo",
+      "package_scripts_test",
+      "package_type",
+      "package_version"
+    ],
+    "5": [
+      "routes_billing",
+      "routes_billing_createclient",
+      "routes_billing_createtenantfromcheckout",
+      "routes_billing_crypto",
+      "routes_billing_express",
+      "routes_billing_generateapikey",
+      "routes_billing_generatetemppassword",
+      "routes_billing_logauditevent",
+      "routes_billing_rationale_214",
+      "routes_billing_router",
+      "routes_billing_stripe",
+      "routes_billing_supabase"
+    ],
+    "6": [
+      "server_apiratelimiter",
+      "server_authratelimiter",
+      "server_getclientip",
+      "server_ingestdocumentwithmetadata",
+      "server_logauditevent",
+      "server_logcrashtelemetry",
+      "server_requireadmin"
+    ],
+    "7": [
+      "server_buildauthresponse",
+      "server_resolveaccesslevel"
+    ],
+    "8": [
+      "server_extracttoken",
+      "server_verifyactiveaccountandtoken"
+    ]
+  },
+  "cohesion": {
+    "0": 0.08,
+    "1": 0.08695652173913043,
+    "2": 0.14761904761904762,
+    "3": 0.1895424836601307,
+    "4": 0.15384615384615385,
+    "5": 0.19696969696969696,
+    "6": 0.2857142857142857,
+    "7": 1.0,
+    "8": 1.0
+  },
+  "gods": [
+    {
+      "id": "scripts_create_tenant_main",
+      "label": "main()",
+      "degree": 12
+    },
+    {
+      "id": "scripts_seed_demo_tenant_main",
+      "label": "main()",
+      "degree": 11
+    },
+    {
+      "id": "server_logauditevent",
+      "label": "logAuditEvent()",
+      "degree": 7
+    },
+    {
+      "id": "package_scripts",
+      "label": "scripts",
+      "degree": 4
+    },
+    {
+      "id": "scripts_seed_demo_tenant_fail",
+      "label": "fail()",
+      "degree": 3
+    },
+    {
+      "id": "scripts_seed_demo_tenant_red",
+      "label": "red()",
+      "degree": 3
+    },
+    {
+      "id": "scripts_create_tenant_fail",
+      "label": "fail()",
+      "degree": 3
+    },
+    {
+      "id": "scripts_create_tenant_red",
+      "label": "red()",
+      "degree": 3
+    },
+    {
+      "id": "routes_billing_createtenantfromcheckout",
+      "label": "createTenantFromCheckout()",
+      "degree": 3
+    },
+    {
+      "id": "server_authratelimiter",
+      "label": "authRateLimiter()",
+      "degree": 3
+    }
+  ],
+  "surprises": [
+    {
+      "source": "verifyActiveAccountAndToken()",
+      "target": "logAuditEvent()",
+      "source_files": [
+        "server.js",
+        "server.js"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "note": "Bridges community 6 → community 8"
+    }
+  ],
+  "questions": [
+    {
+      "type": "bridge_node",
+      "question": "Why does `dependencies` connect `dependencies` to `package.json`?",
+      "why": "High betweenness centrality (0.078) - this node is a cross-community bridge."
+    },
+    {
+      "type": "isolated_nodes",
+      "question": "What connects `axios`, `bcrypt`, `cors` to the rest of the system?",
+      "why": "56 weakly-connected nodes found - possible documentation gaps or missing edges."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `dependencies` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.08 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `server.js` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.08695652173913043 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `seed-demo-tenant.js` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.14761904761904762 - nodes in this community are weakly interconnected."
+    }
+  ]
+}

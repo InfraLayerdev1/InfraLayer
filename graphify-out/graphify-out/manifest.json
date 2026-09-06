@@ -1,0 +1,32 @@
+{
+  "package.json": {
+    "mtime": 1786954810.072568,
+    "seen": 1786971661.340503,
+    "ast_hash": "80fa732ee1c02b3ae9689289a8590304",
+    "semantic_hash": "80fa732ee1c02b3ae9689289a8590304"
+  },
+  "routes/billing.js": {
+    "mtime": 1786854506.5747912,
+    "seen": 1786971661.3405068,
+    "ast_hash": "40d1329b9c46897ae3bea6b196871965",
+    "semantic_hash": "40d1329b9c46897ae3bea6b196871965"
+  },
+  "scripts/create-tenant.js": {
+    "mtime": 1786242216.4578452,
+    "seen": 1786971661.340508,
+    "ast_hash": "4638c99ba185d32e9cadee9b37d79268",
+    "semantic_hash": "4638c99ba185d32e9cadee9b37d79268"
+  },
+  "scripts/seed-demo-tenant.js": {
+    "mtime": 1786248902.0782094,
+    "seen": 1786971661.340509,
+    "ast_hash": "8cac2ca94772b621781e65f55b4589c7",
+    "semantic_hash": "8cac2ca94772b621781e65f55b4589c7"
+  },
+  "server.js": {
+    "mtime": 1786955552.1574714,
+    "seen": 1786971661.34051,
+    "ast_hash": "d0e9cce4185b2f816ec1d65c393ce2fb",
+    "semantic_hash": "d0e9cce4185b2f816ec1d65c393ce2fb"
+  }
+}

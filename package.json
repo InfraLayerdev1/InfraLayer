@@ -1,0 +1,36 @@
+{
+  "name": "company-ai",
+  "version": "1.0.0",
+  "private": true,
+  "description": "InfraLayer — Multi-Tenant Pre-LLM Security Control Plane",
+  "workspaces": [
+    "packages/*",
+    "sdks/*",
+    "examples/*",
+    "gateway"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "clean": "turbo run clean",
+    "format": "prettier --write \"**/*.{ts,tsx,js,json,md,py}\"",
+    "start": "node gateway/server.js",
+    "start:gateway": "cd gateway && node server.js",
+    "create-tenant": "cd gateway && npm run create-tenant",
+    "seed-demo": "cd gateway && npm run seed-demo",
+    "benchmark": "node scripts/benchmark.js",
+    "benchmark:latency": "tsx scripts/benchmark-latency.ts"
+  },
+  "devDependencies": {
+    "prettier": "^3.2.0",
+    "tsx": "^4.23.13",
+    "turbo": "^2.0.0",
+    "typescript": "^5.4.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "packageManager": "npm@10.8.0"
+}
