@@ -1,6 +1,6 @@
 /**
  * InfraLayer v0.2.0 — Offline tarball QA harness
- * Verifies @infralayer-ai/core + @infralayer-ai/sdk resolve, type-check, and run.
+ * Verifies infralayer-core + infralayer-sdk resolve, type-check, and run.
  */
 
 import {
@@ -10,7 +10,7 @@ import {
   type UserContext,
   type RawContext,
   type SanitizeResult,
-} from '@infralayer-ai/core';
+} from 'infralayer-core';
 
 import {
   InfraLayer,
@@ -18,7 +18,7 @@ import {
   createLocalInfraLayer,
   type InfraLayerConfig,
   type HealthResponse,
-} from '@infralayer-ai/sdk';
+} from 'infralayer-sdk';
 
 const PASS = 'PASS';
 const FAIL = 'FAIL';
@@ -34,7 +34,7 @@ async function main(): Promise<void> {
   console.log('=== InfraLayer v0.2.0 Offline Tarball QA ===\n');
 
   // --- Core: instantiate + sanitize ---
-  console.log('[1] @infralayer-ai/core');
+  console.log('[1] infralayer-core');
   const ownerControl = new SystemOwnerControl();
   const core: InfraLayerCore = createInfraLayerCore({ ownerControl });
   assert(core instanceof InfraLayerCore, 'createInfraLayerCore returns InfraLayerCore');
@@ -92,7 +92,7 @@ async function main(): Promise<void> {
   assert(perm.allowed === true, 'checkPermission allows matching role/perms');
 
   // --- SDK: local mode client ---
-  console.log('\n[2] @infralayer-ai/sdk (local mode)');
+  console.log('\n[2] infralayer-sdk (local mode)');
   const config: InfraLayerConfig = {
     localMode: true,
     defaultUserContext: userContext,

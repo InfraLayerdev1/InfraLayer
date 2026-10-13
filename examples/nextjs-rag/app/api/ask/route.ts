@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createLocalInfraLayer, UserContext } from '@infralayer-ai/sdk';
+import { createLocalInfraLayer, UserContext } from 'infralayer-sdk';
 
 const infra = createLocalInfraLayer();
 

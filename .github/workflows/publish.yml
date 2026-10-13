@@ -25,13 +25,13 @@ jobs:
       - name: Build all packages
         run: npm run build
 
-      - name: Publish @infralayer-ai/core
+      - name: Publish infralayer-core
         run: npm publish --access public
         working-directory: packages/core
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Publish @infralayer-ai/sdk
+      - name: Publish infralayer-sdk
         run: npm publish --access public
         working-directory: packages/sdk
         env:

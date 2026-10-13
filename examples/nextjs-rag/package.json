@@ -12,7 +12,7 @@
     "next": "^14.2.0",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
-    "@infralayer-ai/sdk": "^0.2.0"
+    "infralayer-sdk": "^0.2.0"
   },
   "devDependencies": {
     "@types/node": "^20.12.0",
