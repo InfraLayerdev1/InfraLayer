@@ -15,8 +15,8 @@
  */
 
 import { performance } from 'node:perf_hooks';
-import { createLocalInfraLayer } from '@infralayer/sdk';
-import type { UserContext, SanitizeResult } from '@infralayer/sdk';
+import { createLocalInfraLayer } from '@infralayer-ai/sdk';
+import type { UserContext, SanitizeResult } from '@infralayer-ai/sdk';
 
 /* ------------------------------------------------------------------ */
 /* Configuration                                                       */

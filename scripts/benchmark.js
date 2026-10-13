@@ -5,7 +5,7 @@
  * Target: <15ms average overhead per request
  */
 
-const { createLocalInfraLayer } = require('@infralayer/sdk');
+const { createLocalInfraLayer } = require('@infralayer-ai/sdk');
 
 // Test data - varying complexity to simulate real-world usage
 const TEST_CASES = [

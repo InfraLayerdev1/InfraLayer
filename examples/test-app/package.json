@@ -19,7 +19,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@infralayer/core": "file:../../packages/core/infralayer-core-0.2.0.tgz",
-    "@infralayer/sdk": "file:../../packages/sdk/infralayer-sdk-0.2.0.tgz"
+    "@infralayer-ai/core": "file:../../packages/core",
+    "@infralayer-ai/sdk": "file:../../packages/sdk"
   }
 }

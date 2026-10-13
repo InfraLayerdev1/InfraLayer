@@ -22,8 +22,8 @@
  * Run:  npx tsx scripts/stress-test-complex.ts
  */
 import { performance } from 'node:perf_hooks';
-import { InfraLayerCore } from '@infralayer/core';
-import type { UserContext, RawContext, SanitizeResult, PermissionEvaluation } from '@infralayer/core';
+import { InfraLayerCore } from '@infralayer-ai/core';
+import type { UserContext, RawContext, SanitizeResult, PermissionEvaluation } from '@infralayer-ai/core';
 
 /* ------------------------------------------------------------------ */
 /* Telemetry helpers                                                   */

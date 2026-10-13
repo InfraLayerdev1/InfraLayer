@@ -1,7 +1,7 @@
-# @infralayer/core
+# @infralayer-ai/core
 
 **Version:** `0.2.0`  
-**Install:** `npm install @infralayer/core@^0.2.0`
+**Install:** `npm install @infralayer-ai/core@^0.2.0`
 
 Zero-dependency, in-process pre-LLM security filter. Sanitizes context, detects injections, evaluates tenant/role permissions, and exposes the System Owner control plane — all locally, with no network calls.
 

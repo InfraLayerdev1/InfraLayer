@@ -1,9 +1,9 @@
-# @infralayer/sdk
+# @infralayer-ai/sdk
 
 **Version:** `0.2.0`  
-**Install:** `npm install @infralayer/core@^0.2.0 @infralayer/sdk@^0.2.0`
+**Install:** `npm install @infralayer-ai/core@^0.2.0 @infralayer-ai/sdk@^0.2.0`
 
-TypeScript/Node client for InfraLayer. Same sanitize / scan / permission surface in **local** (in-process via `@infralayer/core`) or **remote** (HTTP) mode, with retry, auth refresh, and health checks.
+TypeScript/Node client for InfraLayer. Same sanitize / scan / permission surface in **local** (in-process via `@infralayer-ai/core`) or **remote** (HTTP) mode, with retry, auth refresh, and health checks.
 
 Part of [InfraLayer](../../README.md) — *plug-and-play AI infrastructure for developers.*
 

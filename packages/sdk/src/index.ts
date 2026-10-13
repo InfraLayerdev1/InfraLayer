@@ -18,7 +18,7 @@ import {
   InjectionPattern,
   SecurityFlag,
   SanitizeTelemetry
-} from '@infralayer/core';
+} from '@infralayer-ai/core';
 
 // Re-export core types for convenience
 export type {
