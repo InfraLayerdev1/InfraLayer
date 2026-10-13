@@ -20,19 +20,19 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       - name: Build all packages
         run: npm run build
 
       - name: Publish infralayer-core
-        run: npm publish --access public
+        run: npm publish
         working-directory: packages/core
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish infralayer-sdk
-        run: npm publish --access public
+        run: npm publish
         working-directory: packages/sdk
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
