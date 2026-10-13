@@ -1,11 +1,14 @@
-# InfraLayer — Multi-Tenant Pre-LLM Security Control Plane
+# InfraLayer — Plug-and-play AI infrastructure for developers
 
-[![Penetration Tests: 15/15 PASS](https://img.shields.io/badge/Pen--Tests-15%2F15_PASS-brightgreen)](https://github.com/infralayer/infralayer/security/advisories)
+[![Version: 0.2.0](https://img.shields.io/badge/version-0.2.0-blue.svg)](CHANGELOG.md)
+[![Penetration Tests: 15/15 PASS](https://img.shields.io/badge/Pen--Tests-15%2F15_PASS-brightgreen)](https://github.com/InfraLayerdev1/InfraLayer/security/advisories)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Node.js: >=20](https://img.shields.io/badge/Node.js-%3E%3D20-green.svg)](https://nodejs.org)
 [![Python: >=3.11](https://img.shields.io/badge/Python-%3E%3D3.11-blue.svg)](https://python.org)
 
-**InfraLayer** is a zero-dependency, in-process security perimeter that filters, sanitizes, and validates every prompt before it reaches an LLM. It enforces tenant isolation, role-based access control, PII/secret redaction, and injection detection — **all locally, with zero network latency**.
+**InfraLayer** is plug-and-play AI infrastructure for developers — a zero-dependency, in-process security perimeter that filters, sanitizes, and validates every prompt before it reaches an LLM. It enforces tenant isolation, role-based access control, PII/secret redaction, and injection detection — **all locally, with zero network latency**.
+
+Stable release: **v0.2.0** (`@infralayer/core` + `@infralayer/sdk`). See [CHANGELOG.md](CHANGELOG.md).
 
 ---
 
@@ -13,7 +16,7 @@
 
 | Risk | InfraLayer Mitigation |
 |------|----------------------|
-| **Prompt Injection** | 10 built-in pattern detectors (ignore instructions, DAN, system prompt extraction, etc.) |
+| **Prompt Injection** | 9 built-in pattern detectors (ignore instructions, DAN, system prompt extraction, etc.) |
 | **Jailbreaks** | CRITICAL-severity detection for DAN, Developer Mode, God Mode personas |
 | **Data Exfiltration** | Blocks "output all secrets/passwords/data" attempts |
 | **PII Leakage** | Auto-redacts emails, phones, SSNs, credit cards, IPs, UUIDs |
@@ -28,8 +31,8 @@
 
 | Package | Language | Install | Description |
 |---------|----------|---------|-------------|
-| **[@infralayer/core](packages/core)** | TypeScript | `npm i @infralayer/core` | **Zero-dependency** core security filter (sanitize, detect, evaluate) |
-| **[@infralayer/sdk](packages/sdk)** | TypeScript | `npm i @infralayer/sdk` | Full client with retry, auth, local + remote modes |
+| **[@infralayer/core](packages/core)** | TypeScript | `npm i @infralayer/core@^0.2.0` | **Zero-dependency** core security filter (sanitize, detect, evaluate, owner control) |
+| **[@infralayer/sdk](packages/sdk)** | TypeScript | `npm i @infralayer/sdk@^0.2.0` | Full client with retry, auth, local + remote modes (peers `@infralayer/core@^0.2.0`) |
 | **[infralayer](sdks/python)** | Python | `pip install infralayer` | Native Python SDK (async/sync, Poetry, Pydantic v2) |
 
 ---
@@ -103,7 +106,7 @@
 
 ---
 
-## ⚡ Quickstart — TypeScript (3 Lines)
+## ⚡ Quickstart — TypeScript (v0.2.0)
 
 ```typescript
 import { createLocalInfraLayer } from '@infralayer/sdk';
@@ -111,12 +114,25 @@ import { createLocalInfraLayer } from '@infralayer/sdk';
 const infra = createLocalInfraLayer();
 
 const result = await infra.sanitize(
-  { text: 'What is our PTO policy? My email is john@company.com' },
-  { userId: 'user-123', tenantId: 'tenant-456', role: 'employee', permissions: ['read:documents'] }
+  {
+    text: 'What is our PTO policy? My email is john@company.com',
+    // Default-deny contract: a chunk is allowed only if its metadata.tenantId
+    // matches the user's tenant, or metadata.isGlobalPublic === true.
+    metadata: { tenantId: 'tenant_alpha' },
+  },
+  {
+    userId: 'user-123',
+    tenantId: 'tenant_alpha',
+    role: 'employee',
+    permissions: ['read:documents'],
+  }
 );
 
 // result.sanitizedContext.text → "What is our PTO policy? My email is [EMAIL_REDACTED]"
+// result.telemetry.processingTimeMs → in-process latency (typically <1ms)
 ```
+
+Package docs: [`@infralayer/core`](packages/core/README.md) · [`@infralayer/sdk`](packages/sdk/README.md)
 
 ---
 
@@ -128,11 +144,17 @@ from infralayer import create_local_infralayer
 infra = create_local_infralayer()
 
 result = await infra.sanitize(
-    "What is our PTO policy? My email is john@company.com",
-    user_id="user-123",
-    tenant_id="tenant-456",
-    role="employee",
-    permissions=["read:documents"]
+    {
+        "text": "What is our PTO policy? My email is john@company.com",
+        # Default-deny contract: chunk must be scoped to the user's tenant.
+        "metadata": {"tenantId": "tenant_alpha"},
+    },
+    {
+        "user_id": "user-123",
+        "tenant_id": "tenant_alpha",
+        "role": "employee",
+        "permissions": ["read:documents"],
+    },
 )
 
 # result.sanitized_context.text → "What is our PTO policy? My email is [EMAIL_REDACTED]"
@@ -142,15 +164,17 @@ result = await infra.sanitize(
 
 ## 🔧 Installation
 
-### TypeScript / Node.js
+### TypeScript / Node.js (v0.2.0)
 
 ```bash
-# Core only (zero dependencies)
-npm install @infralayer/core
+# Core only (zero runtime dependencies)
+npm install @infralayer/core@^0.2.0
 
-# Full SDK (with retry, auth, remote mode)
-npm install @infralayer/sdk
+# Full SDK — install both; SDK peers core at ^0.2.0
+npm install @infralayer/core@^0.2.0 @infralayer/sdk@^0.2.0
 ```
+
+> **Peer dependency:** `@infralayer/sdk@^0.2.0` requires `@infralayer/core@^0.2.0`. Installing both together avoids npm peer warnings and broken offline tarball installs.
 
 ### Python
 
@@ -179,7 +203,7 @@ interface UserContext {
 interface RawContext {
   text: string;
   source?: string;
-  metadata?: Record<string, unknown>; // requiredPermissions, requiredRole, minAccessLevel, tenantId
+  metadata?: Record<string, unknown>; // tenantId (required unless isGlobalPublic), requiredPermissions, requiredRole, minAccessLevel
 }
 ```
 
@@ -258,19 +282,29 @@ const eval = infra.checkPermission(userContext, ['read:documents'], 'admin', 3, 
 
 ---
 
-## 🏃 Running the Benchmark
+## 🏃 Benchmark
+
+`sanitize()` is a synchronous, CPU-bound, in-process operation — there is **no network hop** on the critical path, which is why these figures are in microseconds.
+
+| Metric | InfraLayer (in-process) | Secondary LLM call (baseline) |
+|--------|------------------------|-------------------------------|
+| **Average latency / request** | **0.025 ms** | ~3,146 ms |
+| **Throughput (sustained concurrency)** | **39,400+ req/s** | — |
+| **Adversarial stress leak rate** | **0%** (100 obfuscated/malformed vectors) | — |
+
+### Metric notes
+
+- **Accept path** (authorized context, matched tenant): ~0.025 ms — pattern scanning + PII/secret redaction + permission evaluation on the happy path.
+- **Deny path** (default-deny block): ~0.016 ms — short-circuits at the permission gate *before* pattern scanning; the fastest profile.
+- **Concurrency**: `sanitize()` is synchronous, so a `Promise.all` burst serializes on one thread. Throughput is stated per-workload (e.g. 39,400+ single-chunk req/s), not as a single global number.
+
+> **Provenance (reproduced on this machine, Node 24):** 10,000-request mixed workload — avg **0.016 ms**, p50 0.018 ms, p95 0.028 ms, p99 0.071 ms, **61,998 req/s** (5,000 accept / 5,000 deny). Adversarial suite: **0.0% leak, 0.0% false-positive, 0 crashes** across 100 vectors under default-deny. The **~3,146 ms** figure is the asserted baseline for a secondary LLM round-trip.
+
+### Running the benchmark
 
 ```bash
 # From repo root
 node scripts/benchmark.js
-```
-
-**Expected Output (Local Mode):**
-```
-Average latency: 0.03ms  (Target: <15ms) ✅
-p95 latency:     0.05ms
-p99 latency:     0.11ms
-Throughput:      ~38,000 req/s
 ```
 
 ---
@@ -281,16 +315,16 @@ Throughput:      ~38,000 req/s
 
 ```bash
 # Core
-cd packages/infralayer-core && npm test
+cd packages/core && npm test
 
 # SDK
-cd packages/infralayer-sdk && npm test
+cd packages/sdk && npm test
 ```
 
 ### Python Package
 
 ```bash
-cd packages/infralayer-python
+cd sdks/python
 pytest --cov=src/infralayer --cov-report=term-missing
 # Coverage: 85%+
 ```
@@ -301,16 +335,22 @@ pytest --cov=src/infralayer --cov-report=term-missing
 
 ```
 company-ai/
+├── CHANGELOG.md                # Release notes (v0.2.0+)
 ├── packages/
-│   ├── core/                   # Zero-dependency TS core (@infralayer/core)
+│   ├── core/                   # Zero-dependency TS core (@infralayer/core@^0.2.0)
+│   │   ├── README.md           # Core API + SystemOwnerControl
 │   │   ├── src/index.ts        # InfraLayerCore class, types, patterns
+│   │   ├── src/owner-control.ts# System Owner governance engine
 │   │   ├── src/index.test.ts   # 27+ tests
+│   │   ├── dist/               # Compiled JS + complete .d.ts
 │   │   ├── package.json        # MIT, zero deps, Node >=20
 │   │   └── tsconfig.json
-│   ├── sdk/                    # Full TS/Node SDK (@infralayer/sdk)
+│   ├── sdk/                    # Full TS/Node SDK (@infralayer/sdk@^0.2.0)
+│   │   ├── README.md           # SDK client API (local + remote)
 │   │   ├── src/index.ts        # InfraLayer client, axios + retry
 │   │   ├── src/index.test.ts   # 29+ tests (local/remote, mode switching)
-│   │   └── package.json        # Peer dep on @infralayer/core
+│   │   ├── dist/               # Compiled JS + complete .d.ts
+│   │   └── package.json        # Peer dep: @infralayer/core@^0.2.0
 ├── sdks/
 │   └── python/                 # Native Python SDK (infralayer)
 │       ├── src/infralayer/     # Package source
@@ -384,10 +424,12 @@ MIT License — see [LICENSE](LICENSE) for details.
 
 This project uses [Semantic Versioning](https://semver.org/). Releases are tagged as `v<major>.<minor>.<patch>`.
 
+Current stable: **v0.2.0** — see [CHANGELOG.md](CHANGELOG.md).
+
 ---
 
 ## 📞 Support
 
-- **Issues**: [GitHub Issues](https://github.com/infralayer/infralayer/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/infralayer/infralayer/discussions)
+- **Issues**: [GitHub Issues](https://github.com/InfraLayerdev1/InfraLayer/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/InfraLayerdev1/InfraLayer/discussions)
 - **Security**: security@infralayer.io

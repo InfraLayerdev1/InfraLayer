@@ -253,7 +253,7 @@ describe('InfraLayer SDK', () => {
       const healthResponse = {
         data: {
           status: 'healthy',
-          version: '1.0.0',
+          version: '0.2.0',
           timestamp: new Date().toISOString(),
           checks: { core: 'ok', api: 'ok' }
         }

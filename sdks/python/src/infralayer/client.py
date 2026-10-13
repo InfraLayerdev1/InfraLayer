@@ -614,7 +614,7 @@ class InfraLayer:
         if self._local_mode:
             return HealthResponse(
                 status="healthy",
-                version="1.0.0",
+                version="0.2.0",
                 timestamp=datetime.utcnow().isoformat() + "Z",
                 checks={"core": "ok"},
             )

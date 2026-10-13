@@ -1,6 +1,6 @@
 {
   "name": "@infralayer/core",
-  "version": "1.0.0",
+  "version": "0.2.0",
   "description": "InfraLayer Security Filter Core - Zero-dependency pre-LLM context sanitization, injection detection, and role-based permission evaluation",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

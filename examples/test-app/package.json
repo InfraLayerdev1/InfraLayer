@@ -1,0 +1,25 @@
+{
+  "name": "test-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "tsx index.ts",
+    "typecheck": "tsc --noEmit",
+    "verify": "tsc --noEmit && tsx index.ts",
+    "test": "npm run verify"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@types/node": "^20.19.43",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@infralayer/core": "file:../../packages/core/infralayer-core-0.2.0.tgz",
+    "@infralayer/sdk": "file:../../packages/sdk/infralayer-sdk-0.2.0.tgz"
+  }
+}

@@ -351,7 +351,7 @@ class TestHealthCheck:
         result = await infra.health_check()
 
         assert result.status == "healthy"
-        assert result.version == "1.0.0"
+        assert result.version == "0.2.0"
         assert result.checks.get("core") == "ok"
 
     def test_health_check_sync(self, infra):

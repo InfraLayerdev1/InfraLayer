@@ -1,12 +1,13 @@
-# InfraLayer — Open-Core Security Control Plane
+# InfraLayer — Plug-and-play AI infrastructure for developers
 
-> **Production-ready pre-LLM security filtering with 15/15 penetration test passes.**
-> Zero-dependency core • TypeScript SDK • Interactive API docs • Multi-tenant isolation
+> **v0.2.0** — Production-ready pre-LLM security filtering with 15/15 penetration test passes.
+> Zero-dependency core • TypeScript SDK • System Owner control plane • Multi-tenant isolation
 
+[![Version: 0.2.0](https://img.shields.io/badge/version-0.2.0-blue.svg)](../CHANGELOG.md)
 [![npm](https://img.shields.io/npm/v/@infralayer/core?label=@infralayer/core)](https://www.npmjs.com/package/@infralayer/core)
 [![npm](https://img.shields.io/npm/v/@infralayer/sdk?label=@infralayer/sdk)](https://www.npmjs.com/package/@infralayer/sdk)
 [![Node](https://img.shields.io/node/v/@infralayer/core)](https://nodejs.org)
-[![License](https://img.shields.io/npm/l/@infralayer/core)](LICENSE)
+[![License](https://img.shields.io/npm/l/@infralayer/core)](../LICENSE)
 
 ---
 
@@ -17,18 +18,21 @@
 | **LLM sees all your data** | Pre-LLM filter retrieves **only** metadata-cleared chunks |
 | **Prompt injection attacks** | 9 injection pattern categories, 4 severity levels, real-time detection |
 | **PII/Secrets leakage** | Automatic redaction of emails, API keys, JWTs, credit cards, private keys |
-| **Tenant cross-contamination** | Cryptographic tenant isolation at vector level (pgvector + RLS) |
+| **Tenant cross-contamination** | Default-deny tenant isolation (`tenantId` / `isGlobalPublic`) |
 | **No audit trail** | SOC2-style logging: every retrieval, injection, permission decision recorded |
+| **No emergency controls** | `SystemOwnerControl` — LOCKDOWN / THROTTLE / CACHE_PURGE |
 | **Vendor lock-in** | Runs 100% locally (zero network calls) or via REST API |
 
 ---
 
-## 📦 Packages
+## 📦 Packages (v0.2.0)
 
 | Package | Description | Install |
 |---------|-------------|---------|
-| **[@infralayer/core](./infralayer-core)** | Zero-dependency security filter core (in-process) | `npm i @infralayer/core` |
-| **[@infralayer/sdk](./infralayer-sdk)** | TypeScript/Node client with retry, auth, local+remote modes | `npm i @infralayer/sdk` |
+| **[@infralayer/core](./core/README.md)** | Zero-dependency security filter + owner control | `npm i @infralayer/core@^0.2.0` |
+| **[@infralayer/sdk](./sdk/README.md)** | TypeScript/Node client with retry, auth, local+remote modes | `npm i @infralayer/sdk@^0.2.0` |
+
+> SDK peers `@infralayer/core@^0.2.0`. Install both together. See [CHANGELOG.md](../CHANGELOG.md).
 
 ---
 
@@ -121,7 +125,7 @@ const infra = createLocalInfraLayer();
 
 export async function askQuestion(question: string, userId: string, tenantId: string) {
   const result = await infra.sanitize(
-    { text: question },
+    { text: question, metadata: { tenantId } },
     { userId, tenantId, role: 'employee', permissions: ['read:documents'] }
   );
   return result.sanitizedContext?.text ?? '[BLOCKED]';
@@ -150,7 +154,7 @@ const app = express();
 
 app.post('/api/ask', express.json(), async (req, res) => {
   const result = await infra.sanitize(
-    { text: req.body.question },
+    { text: req.body.question, metadata: { tenantId: req.user.tenantId } },
     { userId: req.user.id, tenantId: req.user.tenantId, role: req.user.role, permissions: req.user.permissions }
   );
   res.json({ answer: result.sanitizedContext?.text ?? '[BLOCKED]', telemetry: result.telemetry });
@@ -317,13 +321,13 @@ npm start
 ### Run Tests
 
 ```bash
-# Core package tests
-cd packages/infralayer-core
+# Core package tests (@infralayer/core@0.2.0)
+cd packages/core
 npm test          # 80%+ coverage required
-npm run build     # TypeScript compilation
+npm run build     # TypeScript compilation → dist/*.d.ts
 
-# SDK package tests
-cd packages/infralayer-sdk
+# SDK package tests (@infralayer/sdk@0.2.0, peer core ^0.2.0)
+cd packages/sdk
 npm test
 npm run build
 ```
@@ -558,18 +562,18 @@ services:
 
 ```bash
 # 1. Fork & clone
-git clone https://github.com/yourorg/infralayer.git
+git clone https://github.com/InfraLayerdev1/InfraLayer.git
 
-# 2. Install all workspaces
-npm install -w packages/infralayer-core -w packages/infralayer-sdk
+# 2. Install workspaces
+npm install -w packages/core -w packages/sdk
 
 # 3. Run tests
-npm test -w packages/infralayer-core
-npm test -w packages/infralayer-sdk
+npm test -w packages/core
+npm test -w packages/sdk
 
-# 4. Build
-npm run build -w packages/infralayer-core
-npm run build -w packages/infralayer-sdk
+# 4. Build (emits complete .d.ts)
+npm run build -w packages/core
+npm run build -w packages/sdk
 
 # 5. Open PR with test results
 ```
@@ -584,7 +588,10 @@ MIT © InfraLayer Security Team
 
 ## 🔗 Links
 
+- **Root README**: [../README.md](../README.md)
+- **Changelog (v0.2.0)**: [../CHANGELOG.md](../CHANGELOG.md)
+- **Core package docs**: [./core/README.md](./core/README.md)
+- **SDK package docs**: [./sdk/README.md](./sdk/README.md)
 - **Production Gateway**: https://gateway-alpha-gray.vercel.app
 - **Interactive Docs**: https://gateway-alpha-gray.vercel.app/docs
-- **Security Audit**: `company-ai/CLAUDE.md` (Phase 8-10 verification)
-- **Issue Tracker**: GitHub Issues
+- **Issue Tracker**: https://github.com/InfraLayerdev1/InfraLayer/issues

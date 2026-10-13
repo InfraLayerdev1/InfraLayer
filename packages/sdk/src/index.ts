@@ -152,7 +152,7 @@ export class InfraLayer {
       timeout: this.config.timeout,
       headers: {
         'Content-Type': 'application/json',
-        'User-Agent': `@infralayer/sdk@1.0.0`
+        'User-Agent': `@infralayer/sdk@0.2.0`
       }
     });
 
@@ -403,7 +403,7 @@ export class InfraLayer {
     if (this.config.localMode) {
       return {
         status: 'healthy',
-        version: '1.0.0',
+        version: '0.2.0',
         timestamp: new Date().toISOString(),
         checks: { core: 'ok' }
       };
