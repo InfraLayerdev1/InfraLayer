@@ -26,16 +26,12 @@ jobs:
         run: npm run build
 
       - name: Publish infralayer-core
-        run: |
-          cd packages/core
-          npm publish --access public
+        run: cd packages/core && npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish infralayer-sdk
-        run: |
-          cd packages/sdk
-          npm publish --access public
+        run: cd packages/sdk && npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
